@@ -19,9 +19,9 @@ let connection = mysql.createConnection({
 
 //call on connection for mySQL and iinquirer node package allowing the user to interact via terminal and node
 connection.connect();
-askQuestions()
+askQs()
 
-function askQuestions() {
+function askQs() {
   inquirer.prompt([{
       message: "What would you like to do?",
       type: "list",
@@ -97,8 +97,8 @@ function selectInventory(prodId, prodQty) {
 
       connection.query('SELECT * FROM products', function (error, resp) {
         if (error) throw error;
-        var prod;
-        for (var i = 0; i < resp.length; i++) {
+        let prod;
+        for (let i = 0; i < resp.length; i++) {
           if (resp[i].id == ans.prodId) {
             prod = resp[i]
           }
@@ -117,8 +117,8 @@ function selectInventory(prodId, prodQty) {
 };
 //function to add to existing inventory
 function addToInventory(prodObj, prodId, prodQty) {
-  var newQuantity = prodObj.stock + prodQty
-  var query = "update products Set stock = ? where ?";
+  let newQuantity = prodObj.stock + prodQty
+  let query = "update products Set stock = ? where ?";
   connection.query(query, [newQuantity, {
     id: prodId
   }], function (error, res) {})
@@ -146,7 +146,7 @@ function addProduct(params) {
       name: "prodQty"
     }
   ]).then(function (ans) {
-    var query = "Insert Into products (product_name, department, price, stock) VAlUES (?, ?, ?, ?)";
+    let query = "Insert Into products (product_name, department, price, stock) VAlUES (?, ?, ?, ?)";
     console.log(ans)
     if (ans.prodName !== '' && ans.prodDept !== '' && ans.prodPrice !== '' && ans.prodQty !== '') {
       console.log('product info validated')
