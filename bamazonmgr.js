@@ -6,62 +6,63 @@ let fs = require("fs");
 
 // create connection to the sql database
 let connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
+  host: "localhost",
+  port: 3306,
 
-    // DK's username (from my SQL workbench)
-    user: "root",
+  // DK's username (from my SQL workbench)
+  user: "root",
 
-    // PW workbench to access DB schema & seed info from mySQL
-    password: "847Fellsway",
-    database: "bamazon"
+  // PW workbench to access DB schema & seed info from mySQL
+  password: "847Fellsway",
+  database: "bamazon"
 });
 
 //call on connection for mySQL and iinquirer node package allowing the user to interact via terminal and node
 connection.connect();
 askQuestions()
+
 function askQuestions() {
-  inquirer.prompt([
-    {
+  inquirer.prompt([{
       message: "What would you like to do?",
       type: "list",
       name: "managerAction",
       choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"]
-    }
-  ])
-  //switch statement cycle through various functions, if a match message will prompt the user through desired function
-  .then(function (ans) {
-    switch (ans.managerAction) {
-      case "View Products for Sale":
-        viewProducts()
-        break;
-      case "View Low Inventory":
-        viewLowInventory()
-        break;
-      case "Add to Inventory":
-        selectInventory()
-        break;
-      case "Add New Product":
-        addProduct()
-        break;
-      default:
-
-        break;
-    }
-  });
+    }])
+    //switch statement cycle through various functions, if a match message will prompt the user through desired function 
+    //('switch statement to select one of many code blocks to be executed.'https://www.w3schools.com/js/js_switch.asp)
+    .then(function (ans) {
+      switch (ans.managerAction) {
+        case "View Products for Sale":
+          viewProducts()
+          break;
+        case "View Low Inventory":
+          viewLowInventory()
+          break;
+        case "Add to Inventory":
+          selectInventory()
+          break;
+        case "Add New Product":
+          addProduct()
+          break;
+          //default keyword specifies the code to run if there is no case match
+        default:
+          break;
+      }
+    });
 }
 // view available products 
-function viewProducts () {
+function viewProducts() {
   connection.query('SELECT * FROM products', function (error, res) {
     if (error) throw error;
     // console.log(res);
     res.forEach(row => {
+      //toFixed(2) allows the rats of the products to displaye properly (https://www.w3schools.com/jsref/jsref_tofixed.asp)
       console.log(`Id: ${row.id} Name: ${row.product_name} Price: $${row.price.toFixed(2)} Quantity: ${row.stock}\n`)
     });
     connection.end()
   })
 }
-
+// view products with less than 5 units in stock
 function viewLowInventory() {
   connection.query('SELECT * FROM products WHERE stock < 5', function (error, res) {
     if (error) throw error;
@@ -72,7 +73,7 @@ function viewLowInventory() {
     connection.end()
   })
 }
-
+// funcation for retreiving data on inventory
 function selectInventory(prodId, prodQty) {
   connection.query('SELECT * FROM products', function (error, res) {
     if (error) throw error;
@@ -80,9 +81,9 @@ function selectInventory(prodId, prodQty) {
     res.forEach(row => {
       console.log(`Id: ${row.id} Name: ${row.product_name} Price: ${row.price} Quantity: ${row.stock}\n`)
     });
-    
-    inquirer.prompt([
-      {
+// node.js command line interface that allows the user to interact and ask questions... etc (https://www.npmjs.com/package/inquirer)
+//details around adding inventory below through various if and else statement
+    inquirer.prompt([{
         message: "Please type in the id of the product you would like to add inventory to.",
         type: "input",
         name: "prodId"
@@ -93,7 +94,7 @@ function selectInventory(prodId, prodQty) {
         name: "prodQty"
       }
     ]).then(function (ans) {
-      
+
       connection.query('SELECT * FROM products', function (error, resp) {
         if (error) throw error;
         var prod;
@@ -114,16 +115,17 @@ function selectInventory(prodId, prodQty) {
     })
   })
 };
-
+//function to add to existing inventory
 function addToInventory(prodObj, prodId, prodQty) {
   var newQuantity = prodObj.stock + prodQty
   var query = "update products Set stock = ? where ?";
-  connection.query(query, [newQuantity, { id: prodId }], function (error, res) {
-  })
+  connection.query(query, [newQuantity, {
+    id: prodId
+  }], function (error, res) {})
 }
+//ability to add new products to inventory, and details for the new product
 function addProduct(params) {
-  inquirer.prompt([
-    {
+  inquirer.prompt([{
       message: "What is the name of this product?",
       type: "input",
       name: "prodName"
@@ -146,14 +148,14 @@ function addProduct(params) {
   ]).then(function (ans) {
     var query = "Insert Into products (product_name, department, price, stock) VAlUES (?, ?, ?, ?)";
     console.log(ans)
-    if (ans.prodName !== '' && ans.prodDept !== '' && ans.prodPrice !== '' && ans.prodQty !== ''){
-        console.log('product info validated')
+    if (ans.prodName !== '' && ans.prodDept !== '' && ans.prodPrice !== '' && ans.prodQty !== '') {
+      console.log('product info validated')
       connection.query(query, [ans.prodName, ans.prodDept, ans.prodPrice, ans.prodQty], function (error, res) {
-          if (error)console.log(error)
-          console.log(res)
+        if (error) console.log(error)
+        console.log(res)
       })
       connection.end()
-    }else{
+    } else {
       console.log("ERROR: Product info is incomplete. Please fill all prompts with complete product info!")
       connection.end()
     }
