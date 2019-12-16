@@ -39,4 +39,3 @@ Open New Terminal ensure you are in the correct folder.
  
 * **GitHub Repo**: https://github.com/daniellekeefe/bamazon
 * **Bamazon Video Link**: https://youtu.be/bnZWQlI76KU 
-* **Various Screen Shots**: https://docs.google.com/document/d/17EHcM7sYLOfI3Qb6H7Xy8r0ZMx34zSL6Ygp2LAHOSko/edit?usp=sharing 
