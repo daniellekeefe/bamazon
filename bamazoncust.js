@@ -78,10 +78,12 @@ function orderComplete (prod, prodId, prodQty) {
   let productSales = prod.price * prodQty;
   let queryOne = "UPDATE products SET stock = ? WHERE ?";
   let queryTwo = "UPDATE products SET total_sales = ? WHERE ?";
-
+  
   connection.query(queryOne,[newQuantity, {id: prodId}], function (error, resp) {
   })
-  connection.query(queryTwo, [productSales, {id: prod}], function (error, resp) {
+  connection.query(queryTwo, [productSales, {id: prodId}], function (error, resp) {
   })
+  console.log("New Quantity: " + newQuantity)
+  console.log("Your Cost: " + productSales)
 
 }

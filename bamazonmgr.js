@@ -122,6 +122,7 @@ function addToInventory(prodObj, prodId, prodQty) {
   connection.query(query, [newQuantity, {
     id: prodId
   }], function (error, res) {})
+  console.log("New Quantity: " + newQuantity)
 }
 //ability to add new products to inventory, and details for the new product
 function addProduct(params) {
