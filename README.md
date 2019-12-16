@@ -36,4 +36,4 @@ Open New Terminal ensure you are in the correct folder.
 **How to use**: Please refer to supporting documentation below.
  
 * **GitHub Repo**: https://github.com/daniellekeefe/bamazon
-* **Bamazon Video Link**: https://youtu.be/bnZWQlI76KU 
+* **Bamazon Video Link**: https://youtu.be/PDVjAk4s6so
